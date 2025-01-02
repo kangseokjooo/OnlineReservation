@@ -20,7 +20,7 @@
         @ResponseBody
         public ResultDto<String> signUp(@RequestBody UserDto userDto){
            userService.signUp(userDto);
-            return ResultDto.of("회원가입이 완료되었습니다.", null);
+            return ResultDto.of("200", "회원가입완료");
         }
 
         @PatchMapping("/update/{userid}")
@@ -34,8 +34,7 @@
         @DeleteMapping("/delete")
         @ResponseBody
         public ResultDto<String> deleteUser(@RequestBody UserDto userDto) {
-
             userService.deleteUser(userDto.getUserid());
-            return ResultDto.of("회원이 삭제되었습니다.", null);
+            return ResultDto.of("200", "회원 삭제");
         }
     }

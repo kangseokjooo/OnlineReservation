@@ -3,7 +3,6 @@ package com.kangsukju.reservation_system.Service;
 import com.kangsukju.reservation_system.Dto.UserDto;
 import com.kangsukju.reservation_system.Entity.User;
 import com.kangsukju.reservation_system.Repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
