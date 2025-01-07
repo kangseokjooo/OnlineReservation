@@ -61,7 +61,7 @@ public class JwtUtil {
     private Date extractExpiration(String token) {
         Date expiration = extractClaim(token, Claims::getExpiration);
         if (expiration == null) {
-            throw new IllegalArgumentException("Token does not have expiration");
+            throw new IllegalArgumentException("토큰 만기 X");
         }
         return expiration;
     }
