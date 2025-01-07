@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Tag(name = "Reservation CRUD", description = "예약 관련 API")
@@ -27,5 +24,19 @@ public class ReservationController {
         Reservation reservation = reservationService.createReservation(reservationDto);
         return ResultDto.of("200", reservation);
     }
+    @PutMapping("/update")
+    @ResponseBody
+    @Operation(summary = "예약 수정")
+    public ResultDto<Reservation> updateReservation(@RequestBody ReservationDto reservationDto) {
 
+        String authenticatedUserId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (authenticatedUserId == null) {
+            throw new RuntimeException("인증되지 않은 사용자입니다.");
+        }
+
+
+        Reservation updatedReservation = reservationService.updateReservation(authenticatedUserId, reservationDto);
+        return ResultDto.of("200", updatedReservation);
+    }
 }
