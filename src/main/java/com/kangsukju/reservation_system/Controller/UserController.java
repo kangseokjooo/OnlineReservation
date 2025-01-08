@@ -7,6 +7,7 @@
     import com.kangsukju.reservation_system.Security.JwtUtil;
     import com.kangsukju.reservation_system.Service.UserService;
     import io.swagger.v3.oas.annotations.Operation;
+    import io.swagger.v3.oas.annotations.Parameter;
     import io.swagger.v3.oas.annotations.tags.Tag;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.authentication.AuthenticationManager;
@@ -33,7 +34,7 @@
 
         @PostMapping("/join")
         @ResponseBody
-        @Operation(summary = "회원가입")
+        @Operation(summary = "회원가입",description = "필요 파라미터 userid,password,username,email,phone,address")
         public ResultDto<String> signUp(@RequestBody UserDto userDto){
            userService.signUp(userDto);
             return ResultDto.of("200", "회원가입완료");
@@ -41,7 +42,9 @@
 
         @PostMapping("/login")
         @ResponseBody
-        @Operation(summary = "로그인")
+        @Operation(summary = "로그인",description = "필요 파라미터 userid,password")
+        @Parameter(name = "userid",description = "유저아이디")
+        @Parameter(name = "password",description = "패스워드")
         public ResultDto<String> logIn(@RequestBody LoginDto loginDto){
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDto.getUserid(), loginDto.getPassword())
@@ -73,7 +76,7 @@
 
         @PatchMapping("/update/{userid}")
         @ResponseBody
-        @Operation(summary = "회원수정")
+        @Operation(summary = "회원수정",description = "필요파라미터: user정보")
         public ResultDto<User> updateUser(@PathVariable String userid, @RequestBody UserDto userDto) {
             User updatedUser = userService.updateUser(userid, userDto);
 
@@ -82,7 +85,7 @@
 
         @DeleteMapping("/delete")
         @ResponseBody
-        @Operation(summary = "회원탈퇴")
+        @Operation(summary = "회원탈퇴",description = "필요 파라미터 userid")
         public ResultDto<String> deleteUser(@RequestBody UserDto userDto) {
             userService.deleteUser(userDto.getUserid());
             return ResultDto.of("200", "회원 삭제");

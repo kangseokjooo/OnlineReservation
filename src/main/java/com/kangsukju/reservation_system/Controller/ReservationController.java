@@ -2,16 +2,19 @@ package com.kangsukju.reservation_system.Controller;
 
 import com.kangsukju.reservation_system.Dto.ReservationDto;
 import com.kangsukju.reservation_system.Dto.ResultDto;
+import com.kangsukju.reservation_system.Dto.UpdateReservationDto;
 import com.kangsukju.reservation_system.Entity.Reservation;
 import com.kangsukju.reservation_system.Service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
+@RequestMapping("/reservations")
 @Tag(name = "Reservation CRUD", description = "예약 관련 API")
 public class ReservationController {
     @Autowired
@@ -24,19 +27,26 @@ public class ReservationController {
         Reservation reservation = reservationService.createReservation(reservationDto);
         return ResultDto.of("200", reservation);
     }
-    @PutMapping("/update")
+    @PatchMapping("/update")
     @ResponseBody
     @Operation(summary = "예약 수정")
-    public ResultDto<Reservation> updateReservation(@RequestBody ReservationDto reservationDto) {
-
-        String authenticatedUserId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (authenticatedUserId == null) {
-            throw new RuntimeException("인증되지 않은 사용자입니다.");
-        }
-
-
-        Reservation updatedReservation = reservationService.updateReservation(authenticatedUserId, reservationDto);
+    public ResultDto<Reservation> updateReservation(@RequestBody UpdateReservationDto updateReservationDto) {
+        Reservation updatedReservation = reservationService.updateReservation(updateReservationDto);
         return ResultDto.of("200", updatedReservation);
+    }
+
+    @DeleteMapping("/delete/{userid}/{id}")
+    @ResponseBody
+    @Operation(summary = "예약 삭제")
+    public ResultDto<String> deleteReservation(@PathVariable String userid, @PathVariable Long id) {
+        reservationService.deleteReservation(userid, id);
+        return ResultDto.of("200", "예약이 성공적으로 삭제되었습니다.");
+    }
+
+    @GetMapping("/all/{userid}")
+    @ResponseBody
+    @Operation(summary = "해당 유저의 전체 예약목록 확인")
+    public ResultDto<List<Reservation>> allReservation(@PathVariable String userid,@RequestParam int page,@RequestParam int size){
+        return ResultDto.of("200",reservationService.allReservation(userid,page,size));
     }
 }
