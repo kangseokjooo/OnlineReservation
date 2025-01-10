@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long> {
-    @Query("SELECT r FROM Reservation r  WHERE r.user.userid=:userid AND r.id=:id")
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.user  WHERE r.user.userid=:userid AND r.id=:id")
     Reservation findReservationByUseridAndId(@Param("userid")String userid,@Param("id") Long id);
 
     @Query("SELECT r FROM Reservation r  JOIN FETCH r.user WHERE r.user.userid = :userid")

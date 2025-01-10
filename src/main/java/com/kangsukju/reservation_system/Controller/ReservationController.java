@@ -7,6 +7,7 @@ import com.kangsukju.reservation_system.Entity.Reservation;
 import com.kangsukju.reservation_system.Service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +24,14 @@ public class ReservationController {
     @PostMapping("/create")
     @ResponseBody
     @Operation(summary = "예약 생성")
-    public ResultDto<Reservation> createReservation(@RequestBody ReservationDto reservationDto) {
+    public ResultDto<Reservation> createReservation(@Valid @RequestBody ReservationDto reservationDto) {
         Reservation reservation = reservationService.createReservation(reservationDto);
         return ResultDto.of("200", reservation);
     }
     @PatchMapping("/update")
     @ResponseBody
     @Operation(summary = "예약 수정")
-    public ResultDto<Reservation> updateReservation(@RequestBody UpdateReservationDto updateReservationDto) {
+    public ResultDto<Reservation> updateReservation(@Valid @RequestBody UpdateReservationDto updateReservationDto) {
         Reservation updatedReservation = reservationService.updateReservation(updateReservationDto);
         return ResultDto.of("200", updatedReservation);
     }
@@ -38,7 +39,7 @@ public class ReservationController {
     @DeleteMapping("/delete/{userid}/{id}")
     @ResponseBody
     @Operation(summary = "예약 삭제")
-    public ResultDto<String> deleteReservation(@PathVariable String userid, @PathVariable Long id) {
+    public ResultDto<String> deleteReservation(@Valid @PathVariable String userid,@Valid @PathVariable Long id) {
         reservationService.deleteReservation(userid, id);
         return ResultDto.of("200", "예약이 성공적으로 삭제되었습니다.");
     }
@@ -46,7 +47,7 @@ public class ReservationController {
     @GetMapping("/all/{userid}")
     @ResponseBody
     @Operation(summary = "해당 유저의 전체 예약목록 확인")
-    public ResultDto<List<Reservation>> allReservation(@PathVariable String userid,@RequestParam int page,@RequestParam int size){
+    public ResultDto<List<Reservation>> allReservation(@Valid @PathVariable String userid,@Valid @RequestParam int page,@Valid @RequestParam int size){
         return ResultDto.of("200",reservationService.allReservation(userid,page,size));
     }
 }
