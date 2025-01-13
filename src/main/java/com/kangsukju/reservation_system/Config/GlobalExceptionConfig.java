@@ -1,6 +1,7 @@
 package com.kangsukju.reservation_system.Config;
 
 import com.kangsukju.reservation_system.Dto.ResultDto;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -60,5 +61,11 @@ public class GlobalExceptionConfig {
                 ResultDto.of("403", "접근 불가 " + ex.getMessage()),
                 HttpStatus.FORBIDDEN
         );
+    }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<String> handleOptimisticLockException(OptimisticLockException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("다른 사용자가 데이터를 이용중에 있습니다. 다시 시도해주세요.");
     }
 }

@@ -28,6 +28,7 @@ public class ReservationController {
         Reservation reservation = reservationService.createReservation(reservationDto);
         return ResultDto.of("200", reservation);
     }
+
     @PatchMapping("/update")
     @ResponseBody
     @Operation(summary = "예약 수정")
@@ -39,7 +40,7 @@ public class ReservationController {
     @DeleteMapping("/delete/{userid}/{id}")
     @ResponseBody
     @Operation(summary = "예약 삭제")
-    public ResultDto<String> deleteReservation(@Valid @PathVariable String userid,@Valid @PathVariable Long id) {
+    public ResultDto<String> deleteReservation(@Valid @PathVariable String userid, @Valid @PathVariable Long id) {
         reservationService.deleteReservation(userid, id);
         return ResultDto.of("200", "예약이 성공적으로 삭제되었습니다.");
     }
@@ -47,7 +48,14 @@ public class ReservationController {
     @GetMapping("/all/{userid}")
     @ResponseBody
     @Operation(summary = "해당 유저의 전체 예약목록 확인")
-    public ResultDto<List<Reservation>> allReservation(@Valid @PathVariable String userid,@Valid @RequestParam int page,@Valid @RequestParam int size){
-        return ResultDto.of("200",reservationService.allReservation(userid,page,size));
+    public ResultDto<List<Reservation>> allReservation(@Valid @PathVariable String userid, @Valid @RequestParam int page, @Valid @RequestParam int size) {
+        return ResultDto.of("200", reservationService.allReservation(userid, page, size));
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    @Operation(summary = "특정 예약 조회 (캐싱 적용)")
+    public ResultDto<Reservation> getReservation(@PathVariable Long id) {
+        return ResultDto.of("200", reservationService.getReservation(id));
     }
 }

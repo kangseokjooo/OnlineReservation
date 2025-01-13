@@ -1,4 +1,4 @@
-package com.kangsukju.reservation_system.Config;
+package com.kangsukju.reservation_system.Controller;
 
 import com.kangsukju.reservation_system.Dto.Chat.ChatRequestDto;
 import com.kangsukju.reservation_system.Dto.Chat.ChatResponseDto;
