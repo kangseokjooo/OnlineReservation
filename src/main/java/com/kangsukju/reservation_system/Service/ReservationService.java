@@ -26,6 +26,9 @@ public class ReservationService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private  EmailService emailService;
+
     @CachePut(value = "reservations", key = "#reservationDto.id != null ? #reservationDto.id : #reservationDto.userId")
     public Reservation createReservation(ReservationDto reservationDto) {
         User user = userRepository.findByUserid(reservationDto.getUserId());
@@ -39,8 +42,16 @@ public class ReservationService {
         reservation.setDescription(reservationDto.getDescription());
         reservation.setPrice(reservationDto.getPrice());
         reservation.setUser(user);
+        Reservation savedReservation = reservationRepository.save(reservation);
+//        String subject = "예약이 완료되었습니다!";
+//        String text = String.format("안녕하세요, %s님. 예약이 성공적으로 완료되었습니다.\n\n예약 정보:\n- 위치: %s\n- 시간: %s\n- 가격: %.2f",
+//                user.getUsername(),
+//                reservation.getLocation(),
+//                reservation.getReservationTime(),
+//                reservation.getPrice());
+//        emailService.sendEmail(user.getEmail(), subject, text);
 
-        return reservationRepository.save(reservation);
+        return savedReservation;
     }
 
     @CachePut(value = "reservations", key = "#updateReservationDto.id")
